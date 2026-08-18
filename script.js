@@ -64,7 +64,7 @@ nextBtn.addEventListener('click', () => {
 });
 
 // --- НАСТРОЙКИ ТЕЛЕГРАМ БОТА ---
-const BOT_TOKEN = '8689940888:AAEg1gK_RRiUEGdlKVH-eZqxtJOwXsznMlI'; 
+const BOT_TOKEN = ''; 
 const CHAT_ID = '869955861'; 
 
 // Глобальная переменная для IP, чтобы не искать его при каждом клике
