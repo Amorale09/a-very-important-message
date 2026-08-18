@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdf2f4; /* Очень светлый нежно-розовый */
+    overscroll-behavior: none;
+}
+
+/* --- Анимированный фон --- */
+.bg-blobs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    /* Умный блюр: на телефоне меньше, на ПК больше, чтобы не растворять фигуры в ноль */
+    filter: blur(clamp(30px, 6vw, 80px)); 
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: moveBlob 15s infinite alternate ease-in-out;
+}
+
+/* Используем vmin, чтобы размеры фигур подстраивались под любой экран */
+.blob-1 {
+    width: 60vmin;
+    height: 60vmin;
+    background: #ffb3c6; /* Нежный пастельно-розовый */
+    top: 5%;
+    left: -5%;
+    animation-delay: 0s;
+}
+
+.blob-2 {
+    width: 70vmin;
+    height: 70vmin;
+    background: #ffd1da; /* Мягкий розово-персиковый */
+    bottom: -5%;
+    right: -10%;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 55vmin;
+    height: 55vmin;
+    background: #e6bde8; /* Нежно-лавандовый */
+    top: 25%;
+    left: 20%;
+    animation-delay: -10s;
+}
+
+@keyframes moveBlob {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(5vw, -5vh) scale(1.05); }
+    100% { transform: translate(-5vw, 10vh) scale(0.95); }
+}
+
+/* --- Обертка для фикса скачков текста --- */
+.text-wrapper {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* --- Стеклянная панель --- */
+.glass-panel {
+    position: relative;
+    z-index: 1;
+    /* Размеры для телефонов (на весь экран с небольшими отступами) */
+    width: 90vw;
+    min-height: 50vh;
+    max-height: 85vh;
+    
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 32px; /* Чуть больше скругление для крупного блока */
+    box-shadow: 0 8px 32px rgba(200, 150, 160, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5vh 5vw; /* Отступы теперь зависят от размера экрана */
+    text-align: center;
+}
+
+/* Размеры для планшетов и ПК (те самые 35-40% экрана) */
+@media (min-width: 768px) {
+    .glass-panel {
+        width: 40vw;      /* Занимает 40% ширины экрана */
+        min-height: 40vh; /* Минимум 40% высоты экрана */
+        padding: 40px 50px;
+    }
+}
+
+/* --- Текст сообщений --- */
+.message-text {
+    line-height: 1.5;
+    color: #6a575a;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    opacity: 1;
+    /* Убрали font-size из transition, теперь перестроение строк происходит незаметно, пока текст прозрачный */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    word-wrap: break-word;
+}
+
+/* Классы для анимации переключения текста */
+.message-text.fade-out {
+    opacity: 0;
+    transform: translateY(-15px);
+}
+
+.message-text.fade-in {
+    opacity: 0;
+    transform: translateY(15px);
+}
+
+/* --- Кнопка --- */
+.next-btn {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #a37c82;
+    margin-top: 30px;
+    box-shadow: 0 4px 15px rgba(200, 150, 160, 0.1);
+    transition: all 0.3s ease;
+}
+
+@media (hover: hover) {
+    .next-btn:hover {
+        background: rgba(255, 255, 255, 0.9);
+        color: #d18f9e;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(200, 150, 160, 0.2);
+    }
+
+    .next-btn:hover svg {
+        transform: translateX(4px);
+    }
+}
+
+/* Эффект нажатия */
+.next-btn:active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.8);
+    /* Строчку transition отсюда убрали! */
+}
+
+/* Красивое исчезновение кнопки */
+.next-btn.hidden {
+    opacity: 0;
+    transform: scale(1);/* Кнопка сдуется и чуть уйдет вниз */
+    pointer-events: none;
+}
